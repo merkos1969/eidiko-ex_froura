@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Μισθολόγιο Δυναμικό - Scroll Παιδιά</title>
+<title>Μισθολόγιο Δυναμικό - Ετήσιος Φόρος</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -12,7 +12,7 @@
 
 <header>
 <h1>Μισθολόγιο Εξωτερικής Φρουράς</h1>
-<p>Δυναμικός υπολογισμός αποδοχών, κλιμακίων & φόρων 2026</p>
+<p>Δυναμικός υπολογισμός μισθού και ετήσιου φόρου 2026</p>
 </header>
 
 <nav class="tabs">
@@ -28,7 +28,7 @@
 </div>
 <div class="control">
 <label>Έτη Υπηρεσίας:</label>
-<input type="number" id="yearsService" min="0" max="40" value="0">
+<input type="number" id="yearsService" min="0" max="40" value="26">
 </div>
 <div class="control">
 <label>Βαθμός:</label>
@@ -39,7 +39,7 @@
 <select id="employeeAge">
 <option value="<25">Μέχρι 25</option>
 <option value="26-30">26-30</option>
-<option value=">30">30+</option>
+<option value=">30">31 και πάνω</option>
 </select>
 </div>
 <div class="control">
@@ -91,8 +91,8 @@
 <thead>
 <tr>
 <th>Κλιμάκιο</th><th>Βασικός Μισθός</th><th>Ειδικό Επίδομα</th><th>Οικογενειακή Παροχή</th>
-<th>Σύνολο</th><th>Κρατήσεις</th><th>Φόρος</th><th>Καθαρό</th>
-<th>Νύχτες</th><th>Πενθήμερα</th><th>Τελικό Καθαρό</th>
+<th>Σύνολο Μηνιαίο</th><th>Κρατήσεις Μηνιαίες</th><th>Φόρος Ετήσιος</th><th>Φόρος Μηνιαίος</th><th>Καθαρό Μηνιαίο</th>
+<th>Νύχτες</th><th>Πενθήμερα</th><th>Τελικό Μηνιαίο</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -107,17 +107,16 @@
 function openTab(evt, tabName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; }
+  for(i=0;i<tabcontent.length;i++){tabcontent[i].style.display="none";}
   tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) { tablinks[i].className = tablinks[i].className.replace(" active", ""); }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " active";
+  for(i=0;i<tablinks.length;i++){tablinks[i].className=tablinks[i].className.replace(" active","");}
+  document.getElementById(tabName).style.display="block";
+  evt.currentTarget.className+=" active";
 }
-document.addEventListener("DOMContentLoaded", ()=>{ document.getElementsByClassName("tablinks")[0].click(); calculate(); });
+document.addEventListener("DOMContentLoaded",()=>{document.getElementsByClassName("tablinks")[0].click(); calculate();});
 
 const rates={TPDY:0.04,TEADY:0.03,Health:0.0205,EFKA:0.0667,Unemp:0.02};
 const nightRate=20.35; const fiveDayRate=36.06; const fiveYearAmount=39.87;
-const taxRate=0.26;
 
 function calculate(){
     const tbody=document.querySelector('#salaryTable tbody');
@@ -131,20 +130,21 @@ function calculate(){
     const fiveYear=document.getElementById('fiveYear').value==='yes';
     const numChildren=parseInt(document.getElementById('numChildren').value)||0;
 
-    // Παράδειγμα δεδομένων Excel
     const data=[{grade:'Υπαρχιφύλακας Β', years:26, klimakio:13, basic:1885, special:310, familyAllowance:70}];
     data.forEach(row=>{
-        let gross=row.basic+row.special+row.familyAllowance;
+        let monthlyGross=row.basic+row.special+row.familyAllowance;
         let mtpyBasic=row.basic*0.045; let mtpyAllowance=row.special*0.045;
         let fiveYearDeduction=fiveYear?fiveYearAmount:0;
-        let deductions=gross*rates.TPDY+gross*rates.TEADY+gross*rates.Health+gross*rates.EFKA+gross*rates.Unemp+mtpyBasic+mtpyAllowance+fiveYearDeduction;
+        let monthlyDeductions=monthlyGross*rates.TPDY+monthlyGross*rates.TEADY+monthlyGross*rates.Health+monthlyGross*rates.EFKA+monthlyGross*rates.Unemp+mtpyBasic+mtpyAllowance+fiveYearDeduction;
+        // Ετήσιος φόρος
+        let annualGross=monthlyGross*12; let annualDeductions=monthlyDeductions*12;
         let ageFactor=1; if(ageCat=='<25') ageFactor=0.24; else if(ageCat=='26-30') ageFactor=0.26; else ageFactor=0.28;
-        let tax=(gross-deductions)*ageFactor;
-        let net=gross-deductions-tax;
+        let annualTax=(annualGross-annualDeductions)*ageFactor; let monthlyTax=annualTax/12;
+        let net=monthlyGross-monthlyDeductions-monthlyTax;
         let nightTotal=nights*nightRate; let fiveDayTotal=fiveDays*fiveDayRate;
         let finalNet=net+nightTotal+fiveDayTotal;
         const tr=document.createElement('tr');
-        tr.innerHTML=`<td>${row.klimakio}</td><td>${row.basic}</td><td>${row.special}</td><td>${row.familyAllowance}</td><td>${gross.toFixed(2)}</td><td>${deductions.toFixed(2)}</td><td>${tax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
+        tr.innerHTML=`<td>${row.klimakio}</td><td>${row.basic}</td><td>${row.special}</td><td>${row.familyAllowance}</td><td>${monthlyGross.toFixed(2)}</td><td>${monthlyDeductions.toFixed(2)}</td><td>${annualTax.toFixed(2)}</td><td>${monthlyTax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
         tbody.appendChild(tr);
     });
 }
