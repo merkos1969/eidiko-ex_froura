@@ -24,7 +24,8 @@
       <div class="row2">
         <div>
           <label>Έτη υπηρεσίας</label>
-          <input type="number" id="yearsService" min="0" max="45" value="26">
+          <input type="number" id="yearsService" min="0" max="45" value="26" readonly>
+      <div class="mini-hint">Υπολογίζεται αυτόματα από την ημερομηνία πρόσληψης.</div>
         </div>
         <div>
           <label>Ασφαλισμένος</label>
@@ -96,6 +97,8 @@
       <input type="number" id="extra" step="0.01" value="0">
 
       <button onclick="calculate()">Υπολογισμός</button>
+      <button type="button" id="clearSavedData" class="danger-btn">Διαγραφή στοιχείων</button>
+      <div id="saveStatus" class="save-status">Τα στοιχεία αποθηκεύονται αυτόματα στη συσκευή σου.</div>
       <p class="hint">Ο φόρος υπολογίζεται ετήσια πάνω στο φορολογητέο μετά τις κρατήσεις και ο μηνιαίος φόρος βγαίνει διά 12.</p>
     </section>
 
@@ -240,6 +243,97 @@ function getTaxCredit(children, annualTaxable){
   return clampMin0(credit);
 }
 
+
+
+const STORAGE_KEY = 'eidiko_froura_salary_saved_fields_v1';
+const DEFAULT_VALUES = {
+  hireDate: '2000-07-20',
+  yearsService: '26',
+  insured: 'after1993',
+  newHire: false,
+  familyStatus: 'married',
+  children: '1',
+  ageGroup: '31p',
+  fiveYear: 'no',
+  nights: '0',
+  fiveDays: '0',
+  extra: '0'
+};
+
+function getSavableFields(){
+  return Array.from(document.querySelectorAll('input, select'))
+    .filter(el => el.id && el.id !== 'yearsService');
+}
+
+function saveFields(){
+  const data = {};
+  getSavableFields().forEach(el => {
+    data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const status = document.getElementById('saveStatus');
+  if(status){
+    status.textContent = 'Αποθηκεύτηκαν αυτόματα τα στοιχεία.';
+    clearTimeout(window.__saveStatusTimer);
+    window.__saveStatusTimer = setTimeout(() => {
+      status.textContent = 'Τα στοιχεία αποθηκεύονται αυτόματα στη συσκευή σου.';
+    }, 1800);
+  }
+}
+
+function loadFields(){
+  let data = {};
+  try{
+    data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  }catch(e){
+    data = {};
+  }
+
+  Object.entries(DEFAULT_VALUES).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const saved = Object.prototype.hasOwnProperty.call(data, id) ? data[id] : value;
+    if(el.type === 'checkbox') el.checked = !!saved;
+    else el.value = saved;
+  });
+}
+
+function clearSavedFields(){
+  localStorage.removeItem(STORAGE_KEY);
+
+  Object.entries(DEFAULT_VALUES).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(el.type === 'checkbox') el.checked = !!value;
+    else el.value = value;
+  });
+
+  calculateServiceYearsFromHireDate();
+  calculate();
+
+  const status = document.getElementById('saveStatus');
+  if(status) status.textContent = 'Τα αποθηκευμένα στοιχεία διαγράφηκαν.';
+}
+
+function calculateServiceYearsFromHireDate(){
+  const hireInput = document.getElementById('hireDate');
+  const yearsInput = document.getElementById('yearsService');
+  if(!hireInput || !yearsInput || !hireInput.value) return;
+
+  const hireDate = new Date(hireInput.value + 'T00:00:00');
+  const today = new Date();
+
+  let years = today.getFullYear() - hireDate.getFullYear();
+  const monthDiff = today.getMonth() - hireDate.getMonth();
+  const dayDiff = today.getDate() - hireDate.getDate();
+
+  if(monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)){
+    years--;
+  }
+
+  yearsInput.value = Math.max(0, years);
+}
+
 function calculate(){
   const years = parseInt(document.getElementById('yearsService').value, 10) || 0;
   const familyStatus = document.getElementById('familyStatus').value;
@@ -340,10 +434,24 @@ function calculate(){
 }
 
 document.querySelectorAll('input, select').forEach(el => {
-  el.addEventListener('input', calculate);
-  el.addEventListener('change', calculate);
+  el.addEventListener('input', () => {
+    if(el.id === 'hireDate') calculateServiceYearsFromHireDate();
+    calculate();
+    saveFields();
+  });
+  el.addEventListener('change', () => {
+    if(el.id === 'hireDate') calculateServiceYearsFromHireDate();
+    calculate();
+    saveFields();
+  });
 });
-document.addEventListener('DOMContentLoaded', calculate);
+document.addEventListener('DOMContentLoaded', () => {
+  loadFields();
+  calculateServiceYearsFromHireDate();
+  calculate();
+  const clearBtn = document.getElementById('clearSavedData');
+  if(clearBtn) clearBtn.addEventListener('click', clearSavedFields);
+});
 </script>
 </body>
 </html>
