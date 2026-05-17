@@ -99,19 +99,6 @@ footer a:hover{text-decoration:underline;}
   .result-row{font-size:15px;align-items:flex-start;}
 }
 
-.checkline{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:14px;
-  font-weight:700;
-}
-.checkline input{
-  width:auto;
-  margin:0;
-  transform:scale(1.2);
-}
-
 .mini-hint{
   margin-top:6px;
   color:#64748b;
@@ -138,24 +125,3 @@ input[readonly]{
   text-align:center;
 }
 
-.auto-status{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-top:14px;
-  padding:12px 14px;
-  border:1px solid #dbeafe;
-  border-radius:14px;
-  background:#eff6ff;
-  font-weight:700;
-}
-.auto-status strong{
-  font-size:14px;
-}
-.auto-status strong.yes{
-  color:#15803d;
-}
-.auto-status strong.no{
-  color:#64748b;
-}

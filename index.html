@@ -35,13 +35,7 @@
           </select>
         </div>
       </div>
-
-      <label class="checkline">
-        <input type="checkbox" id="newHire">
-        Νεοδιοριζόμενος
-      </label>
-
-      <div class="row2">
+<div class="row2">
         <div>
           <label>Οικογενειακή κατάσταση</label>
           <select id="familyStatus">
@@ -250,7 +244,6 @@ const DEFAULT_VALUES = {
   hireDate: '2000-07-20',
   yearsService: '26',
   insured: 'after1993',
-  newHire: false,
   familyStatus: 'married',
   children: '1',
   ageGroup: '31p',
@@ -334,13 +327,32 @@ function calculateServiceYearsFromHireDate(){
   yearsInput.value = Math.max(0, years);
 }
 
+function isNewHireFromHireDate(){
+  const hireInput = document.getElementById('hireDate');
+  if(!hireInput || !hireInput.value) return false;
+
+  const hireDate = new Date(hireInput.value + 'T00:00:00');
+  const oneYearAfterHire = new Date(hireDate);
+  oneYearAfterHire.setFullYear(oneYearAfterHire.getFullYear() + 1);
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  return today < oneYearAfterHire;
+}
+
+function updateNewHireStatus(isNewHire){
+  // Χρησιμοποιείται μόνο εσωτερικά στον υπολογισμό.
+}
+
+
 function calculate(){
   const years = parseInt(document.getElementById('yearsService').value, 10) || 0;
   const familyStatus = document.getElementById('familyStatus').value;
   const children = childrenValue();
   const ageGroup = document.getElementById('ageGroup').value;
   const insured = document.getElementById('insured').value;
-  const newHire = document.getElementById('newHire').checked;
+  const newHire = isNewHireFromHireDate();
   const fiveYear = document.getElementById('fiveYear').value === 'yes';
   const nights = num('nights');
   const fiveDays = num('fiveDays');
@@ -393,7 +405,7 @@ function calculate(){
   const statusText = familyStatus === 'married' ? 'Έγγαμος' : 'Άγαμος';
   const ageText = document.getElementById('ageGroup').options[document.getElementById('ageGroup').selectedIndex].text;
   const insuredText = insured === 'before1993' ? 'Παλαιός / πριν το 1993' : 'Νέος / μετά το 1993';
-  const newHireText = newHire ? ', Νεοδιοριζόμενος' : '';
+  const newHireText = newHire ? ', Νέος διορισμός' : '';
 
   results.innerHTML = `
     <div class="result-row"><span>Βαθμός / κλιμάκιο</span><strong>${row.grade} – Κλιμάκιο ${row.klimakio}</strong></div>
