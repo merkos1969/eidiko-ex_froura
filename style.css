@@ -98,3 +98,16 @@ footer a:hover{text-decoration:underline;}
   .hero h1{font-size:25px;}
   .result-row{font-size:15px;align-items:flex-start;}
 }
+
+.checkline{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:14px;
+  font-weight:700;
+}
+.checkline input{
+  width:auto;
+  margin:0;
+  transform:scale(1.2);
+}

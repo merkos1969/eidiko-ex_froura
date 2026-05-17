@@ -35,6 +35,11 @@
         </div>
       </div>
 
+      <label class="checkline">
+        <input type="checkbox" id="newHire">
+        Νεοδιοριζόμενος
+      </label>
+
       <div class="row2">
         <div>
           <label>Οικογενειακή κατάσταση</label>
@@ -241,6 +246,7 @@ function calculate(){
   const children = childrenValue();
   const ageGroup = document.getElementById('ageGroup').value;
   const insured = document.getElementById('insured').value;
+  const newHire = document.getElementById('newHire').checked;
   const fiveYear = document.getElementById('fiveYear').value === 'yes';
   const nights = num('nights');
   const fiveDays = num('fiveDays');
@@ -260,16 +266,19 @@ function calculate(){
   const gross = basic + specialDuty + familyAllowance + extra;
 
   const tpdy = gross * 0.04;
-  const mtpy = insured === 'before1993'
-    ? (basic * 0.045) + ((specialDuty + familyAllowance + extra) * 0.015)
-    : gross * 0.045;
+  const mtpy = newHire
+    ? basic / 12
+    : (insured === 'before1993'
+      ? (basic * 0.045) + ((specialDuty + familyAllowance + extra) * 0.015)
+      : gross * 0.045);
+  const pouef = 4;
   const teady = gross * 0.03;
   const health = gross * 0.0205;
   const pension = gross * 0.0667;
   const unemployment = gross * 0.02;
   const fiveYearDeduction = fiveYear ? 39.87 : 0;
 
-  const insuranceTotal = tpdy + mtpy + teady + health + pension + unemployment + fiveYearDeduction;
+  const insuranceTotal = tpdy + mtpy + teady + health + pension + unemployment + pouef + fiveYearDeduction;
   const taxableMonthly = clampMin0(gross - insuranceTotal);
   const salaryPeriods = 12;
   const annualTaxable = taxableMonthly * salaryPeriods;
@@ -290,6 +299,7 @@ function calculate(){
   const statusText = familyStatus === 'married' ? 'Έγγαμος' : 'Άγαμος';
   const ageText = document.getElementById('ageGroup').options[document.getElementById('ageGroup').selectedIndex].text;
   const insuredText = insured === 'before1993' ? 'Παλαιός / πριν το 1993' : 'Νέος / μετά το 1993';
+  const newHireText = newHire ? ', Νεοδιοριζόμενος' : '';
 
   results.innerHTML = `
     <div class="result-row"><span>Βαθμός / κλιμάκιο</span><strong>${row.grade} – Κλιμάκιο ${row.klimakio}</strong></div>
@@ -304,6 +314,7 @@ function calculate(){
     <div class="result-row"><span>Υγειονομική 2,05%</span><span>${euro(health)}</span></div>
     <div class="result-row"><span>ΕΦΚΑ σύνταξη 6,67%</span><span>${euro(pension)}</span></div>
     <div class="result-row"><span>Ανεργία 2%</span><span>${euro(unemployment)}</span></div>
+    <div class="result-row"><span>Εισφορά ΠΟΥΕΦ</span><span>${euro(pouef)}</span></div>
     ${fiveYear ? `<div class="result-row"><span>Αναγνώριση 5ετίας</span><span>${euro(fiveYearDeduction)}</span></div>` : ''}
 
     <div class="result-row"><span>Σύνολο κρατήσεων ασφάλισης</span><strong>${euro(insuranceTotal)}</strong></div>
@@ -323,7 +334,7 @@ function calculate(){
       2) Μείον κρατήσεις ασφάλισης = ${euro(insuranceTotal)}<br>
       3) Φορολογητέο = ${euro(taxableMonthly)}<br>
       4) Πάνω σε αυτό υπολογίζεται ο ετήσιος φόρος και μετά ο μηνιαίος /12.<br><br>
-      <strong>Επιλογές:</strong> ${statusText}, παιδιά: ${childrenText}, ηλικία: ${ageText}, ${insuredText}.
+      <strong>Επιλογές:</strong> ${statusText}, παιδιά: ${childrenText}, ηλικία: ${ageText}, ${insuredText}${newHireText}.
     </div>
   `;
 }
