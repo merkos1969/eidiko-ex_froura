@@ -229,3 +229,74 @@ label{
   font-size:16px;
   font-weight:800;
 }
+
+/* Αποτελέσματα σε κελιά */
+#results{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+}
+
+.result-row{
+  display:grid;
+  grid-template-columns:1.25fr 0.75fr;
+  align-items:stretch;
+  gap:0;
+  padding:0;
+  border:1px solid #dbe3ee;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(15,23,42,0.04);
+}
+
+.result-row > span,
+.result-row > strong{
+  display:flex;
+  align-items:center;
+  padding:12px 14px;
+  border-bottom:none;
+}
+
+.result-row > span:first-child{
+  border-right:1px solid rgba(15,23,42,0.10);
+}
+
+.result-row > span:last-child,
+.result-row > strong:last-child{
+  justify-content:flex-end;
+  text-align:right;
+  background:rgba(255,255,255,0.55);
+}
+
+.result-row.total-row{
+  border-width:2px;
+}
+
+.result-row .net{
+  padding:14px;
+}
+
+.small-note{
+  display:block;
+  padding:14px;
+  border:1px solid #e2e8f0;
+  border-radius:16px;
+  background:#f8fafc;
+  margin-top:12px;
+}
+
+/* Σε μικρή οθόνη τα κελιά γίνονται κάθετα */
+@media (max-width:600px){
+  .result-row{
+    grid-template-columns:1fr;
+  }
+  .result-row > span:first-child{
+    border-right:none;
+    border-bottom:1px solid rgba(15,23,42,0.10);
+  }
+  .result-row > span:last-child,
+  .result-row > strong:last-child{
+    justify-content:flex-start;
+    text-align:left;
+  }
+}
