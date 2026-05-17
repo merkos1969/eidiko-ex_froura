@@ -4,129 +4,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Μισθολόγιο Εξωτερικής Φρουράς - Τελικό</title>
+<title>Μισθολόγιο Δυναμικό - Tabs</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Μισθολόγιο Δυναμικό - Τελικό</h1>
+<header>
+<h1>Μισθολόγιο Εξωτερικής Φρουράς</h1>
+<p>Δυναμικός υπολογισμός αποδοχών, φόρων & κρατήσεων 2026</p>
+</header>
 
-<label>Ημερομηνία Πρόσληψης:
+<nav class="tabs">
+<button class="tablinks" onclick="openTab(event, 'Employee')">Στοιχεία Εργαζόμενου</button>
+<button class="tablinks" onclick="openTab(event, 'Extras')">Επιδόματα / Νύχτες</button>
+<button class="tablinks" onclick="openTab(event, 'Result')">Υπολογισμός</button>
+</nav>
+
+<section id="Employee" class="tabcontent">
+<div class="control">
+<label>Ημερομηνία Πρόσληψης:</label>
 <input type="date" id="hireDate">
-</label>
-
-<label>Νεοδιορισμένος:
+</div>
+<div class="control">
+<label>Ηλικία εργαζόμενου:</label>
+<select id="employeeAge">
+<option value="<25">Μέχρι 25</option>
+<option value="26-30">26-30</option>
+<option value=">30">30+</option>
+</select>
+</div>
+<div class="control">
+<label>Νεοδιορισμένος:</label>
 <input type="checkbox" id="newHire">
-</label>
-
-<label>Οικογενειακή κατάσταση:
+</div>
+<div class="control">
+<label>Οικογενειακή κατάσταση:</label>
 <select id="familyStatus">
 <option value="single">Άγαμος</option>
 <option value="married">Έγγαμος χωρίς παιδιά</option>
 <option value="marriedKids">Έγγαμος με παιδιά</option>
 </select>
-</label>
+</div>
+<div class="control">
+<label>Αριθμός παιδιών:</label>
+<input type="number" id="numChildren" min="0" value="0">
+</div>
+</section>
 
-<label>Νύχτες:
+<section id="Extras" class="tabcontent">
+<div class="control">
+<label>Νύχτες:</label>
 <input type="number" id="nights" min="0" value="0">
-</label>
-
-<label>Πενθήμερα:
+</div>
+<div class="control">
+<label>Πενθήμερα:</label>
 <input type="number" id="fiveDays" min="0" value="0">
-</label>
-
-<label>Αναγνώριση 5ετίας στις κρατήσεις:
+</div>
+<div class="control">
+<label>Αναγνώριση 5ετίας:</label>
 <select id="fiveYear">
 <option value="no">Όχι</option>
 <option value="yes">Ναι</option>
 </select>
-</label>
+</div>
+</section>
 
-<input type="file" id="csvFile" accept=".csv">
-
+<section id="Result" class="tabcontent">
 <table id="salaryTable">
 <thead>
 <tr>
-<th>Κατηγορία</th>
-<th>Βασικός Μισθός</th>
-<th>Νυχτερινά</th>
-<th>Σύνολο</th>
-<th>Κρατήσεις</th>
-<th>Φόρος</th>
-<th>Καθαρό</th>
-<th>Νύχτες</th>
-<th>Πενθήμερα</th>
-<th>Τελικό Καθαρό</th>
+<th>Κατηγορία</th><th>Βασικός Μισθός</th><th>Νυχτερινά</th><th>Σύνολο</th>
+<th>Κρατήσεις</th><th>Φόρος</th><th>Καθαρό</th><th>Νύχτες</th>
+<th>Πενθήμερα</th><th>Τελικό Καθαρό</th>
 </tr>
 </thead>
 <tbody></tbody>
 </table>
+</section>
+
+<footer>
+<p>Μερκούριος Κερμανίδης – <a href="mailto:merkos1969@gmail.com">merkos1969@gmail.com</a></p>
+</footer>
 
 <script>
-const rates = {TPDY:0.04, TEADY:0.03, Health:0.0205, EFKA:0.0667, Unemp:0.02};
-const nightRate = 20.35;
-const fiveDayRate = 36.06;
-const fiveYearAmount = 39.87;
+// Tabs λειτουργία
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) { tablinks[i].className = tablinks[i].className.replace(" active", ""); }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+// Default tab
+document.addEventListener("DOMContentLoaded", ()=>{ document.getElementsByClassName("tablinks")[0].click(); calculate(); });
 
-document.getElementById('csvFile').addEventListener('change', function(e){
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e){
-        const text = e.target.result;
-        const rows = text.trim().split('\n');
-        const tbody = document.querySelector('#salaryTable tbody');
-        tbody.innerHTML = '';
-        const hireDate = new Date(document.getElementById('hireDate').value);
-        const hireYear = hireDate.getFullYear();
-        const isNew = document.getElementById('newHire').checked;
-        const family = document.getElementById('familyStatus').value;
-        const nights = parseFloat(document.getElementById('nights').value)||0;
-        const fiveDays = parseFloat(document.getElementById('fiveDays').value)||0;
-        const fiveYearSelected = document.getElementById('fiveYear').value==='yes';
+// Υπολογισμοί
+const rates={TPDY:0.04,TEADY:0.03,Health:0.0205,EFKA:0.0667,Unemp:0.02};
+const nightRate=20.35; const fiveDayRate=36.06; const fiveYearAmount=39.87;
+const taxRate=0.26;
 
-        for(let i=1;i<rows.length;i++){
-            const cols = rows[i].split(',');
-            const category = cols[0];
-            const basic = parseFloat(cols[1]);
-            const nightExtra = parseFloat(cols[2]);
+function calculate() {
+    const tbody = document.querySelector('#salaryTable tbody');
+    tbody.innerHTML = '';
+    const hireDate = new Date(document.getElementById('hireDate').value);
+    const hireYear = hireDate.getFullYear();
+    const isNew = document.getElementById('newHire').checked;
+    const family = document.getElementById('familyStatus').value;
+    const ageCat = document.getElementById('employeeAge').value;
+    const nights = parseFloat(document.getElementById('nights').value)||0;
+    const fiveDays = parseFloat(document.getElementById('fiveDays').value)||0;
+    const fiveYearSelected = document.getElementById('fiveYear').value==='yes';
+    const numChildren = parseInt(document.getElementById('numChildren').value)||0;
 
-            // Ειδικά επιδόματα ανά οικογενειακή κατάσταση
-            let specialDuty = 0;
-            let childrenAllowance = 0;
-            if(family==='single'){specialDuty=300;}
-            else if(family==='married'){specialDuty=310;}
-            else if(family==='marriedKids'){specialDuty=310; childrenAllowance=70;}
+    const data = [
+        {category:'Α', basic:1200, nightExtra:150},
+        {category:'Β', basic:1500, nightExtra:200},
+        {category:'Γ', basic:1800, nightExtra:250}
+    ];
 
-            const gross = basic + nightExtra + specialDuty + childrenAllowance;
+    data.forEach(row=>{
+        let specialDuty=0, childrenAllowance=0;
+        if(family==='single'){specialDuty=300;}
+        else if(family==='married'){specialDuty=310;}
+        else if(family==='marriedKids'){specialDuty=310; childrenAllowance=70*numChildren;}
 
-            // Υπολογισμός ΜΤΠΥ
-            let mtpyBasic = basic*0.045; // όλοι 4.5% βασικό
-            let mtpyAllowance = (hireYear<1993 ? 0.015 : 0.045)*(specialDuty+childrenAllowance); // επιδόματα
+        let gross = row.basic + row.nightExtra + specialDuty + childrenAllowance;
+        let mtpyBasic = row.basic*0.045;
+        let mtpyAllowance = (hireYear<1993?0.015:0.045)*(specialDuty+childrenAllowance);
+        if(isNew){ mtpyBasic=row.basic/12; mtpyAllowance=0; }
+        let fiveYearDeduction = fiveYearSelected?fiveYearAmount:0;
+        let deductions = gross*rates.TPDY+gross*rates.TEADY+gross*rates.Health+gross*rates.EFKA+gross*rates.Unemp+mtpyBasic+mtpyAllowance+fiveYearDeduction;
+        // Φόρος με βάση ηλικία εργαζόμενου (απλοποιημένο ποσοστό)
+        let ageFactor=1;
+        if(ageCat=='<25'){ageFactor=0.24;}
+        else if(ageCat=='26-30'){ageFactor=0.26;}
+        else{ageFactor=0.28;}
+        let tax = (gross-deductions)*ageFactor;
+        let net = gross-deductions-tax;
+        let nightTotal = nights*nightRate;
+        let fiveDayTotal = fiveDays*fiveDayRate;
+        let finalNet = net+nightTotal+fiveDayTotal;
 
-            // Νεοδιορισμένος → 1/12 βασικού μόνο για 1 χρόνο
-            if(isNew){ mtpyBasic = basic/12; mtpyAllowance = 0; }
-
-            // Κρατήσεις + 5ετία
-            let fiveYearDeduction = fiveYearSelected?fiveYearAmount:0;
-            let deductions = gross*rates.TPDY + gross*rates.TEADY + gross*rates.Health + gross*rates.EFKA + gross*rates.Unemp + mtpyBasic + mtpyAllowance + fiveYearDeduction;
-
-            // Φόρος επί (gross – deductions)
-            const taxRate = 0.26; // παράδειγμα
-            const tax = (gross - deductions)*taxRate;
-
-            const net = gross - deductions - tax;
-            const nightTotal = nights*nightRate;
-            const fiveDayTotal = fiveDays*fiveDayRate;
-            const finalNet = net + nightTotal + fiveDayTotal;
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${category}</td><td>${basic.toFixed(2)}</td><td>${nightExtra.toFixed(2)}</td><td>${gross.toFixed(2)}</td><td>${deductions.toFixed(2)}</td><td>${tax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
-            tbody.appendChild(tr);
-        }
-    }
-    reader.readAsText(file);
-});
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${row.category}</td><td>${row.basic.toFixed(2)}</td><td>${row.nightExtra.toFixed(2)}</td><td>${gross.toFixed(2)}</td><td>${deductions.toFixed(2)}</td><td>${tax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+document.querySelectorAll('input, select').forEach(el=>el.addEventListener('input', calculate));
 </script>
 
 </body>
