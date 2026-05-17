@@ -10,7 +10,6 @@ header p{margin:0.5rem 0 0 0;font-size:1rem;}
 .control{margin:0.5rem 0;}
 .control label{font-weight:500;display:block;margin-bottom:0.3rem;}
 .control input, .control select{padding:0.4rem;border-radius:5px;border:1px solid #ccc;width:100%;}
-.table-section{padding:1rem;overflow-x:auto;}
 table{width:100%;border-collapse:collapse;margin-top:1rem;}
 th, td{border:1px solid #ddd;padding:0.6rem;text-align:center;}
 th{background:#3498db;color:white;}
