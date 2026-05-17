@@ -125,3 +125,85 @@ input[readonly]{
   text-align:center;
 }
 
+
+/* Χρωματική διάκριση αποτελεσμάτων */
+.row-info{
+  background:#f8fafc;
+}
+.row-income{
+  background:#ecfdf5;
+  border-left:5px solid #16a34a;
+  padding-left:12px;
+}
+.row-deduction{
+  background:#fff7ed;
+  border-left:5px solid #f97316;
+  padding-left:12px;
+}
+.row-taxable{
+  background:#f8fafc;
+  border-left:5px solid #64748b;
+  padding-left:12px;
+}
+.row-tax{
+  background:#eff6ff;
+  border-left:5px solid #2563eb;
+  padding-left:12px;
+}
+.row-tax-credit{
+  background:#f0fdf4;
+  border-left:5px solid #22c55e;
+  padding-left:12px;
+}
+.row-extra{
+  background:#f5f3ff;
+  border-left:5px solid #7c3aed;
+  padding-left:12px;
+}
+.row-grand-deduction{
+  background:#fee2e2;
+  border-left:5px solid #dc2626;
+  padding-left:12px;
+}
+.total-row{
+  font-weight:700;
+}
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0 16px 0;
+}
+.legend span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  color:#475569;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:999px;
+  padding:6px 10px;
+}
+.legend i{
+  width:10px;
+  height:10px;
+  display:inline-block;
+  border-radius:50%;
+}
+.legend .income-dot{background:#16a34a;}
+.legend .deduction-dot{background:#f97316;}
+.legend .tax-dot{background:#2563eb;}
+.legend .extra-dot{background:#7c3aed;}
+
+.clean-extra-note{
+  margin-top:14px;
+  padding:12px 14px;
+  background:#f5f3ff;
+  border:1px solid #ddd6fe;
+  border-left:5px solid #7c3aed;
+  border-radius:14px;
+  color:#4c1d95;
+  font-size:14px;
+  line-height:1.45;
+}

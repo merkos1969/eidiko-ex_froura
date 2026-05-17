@@ -87,6 +87,10 @@
         </div>
       </div>
 
+      <div class="clean-extra-note">
+        Οι νύχτες και τα πενθήμερα υπολογίζονται ως <strong>καθαρά ποσά</strong> και προστίθενται απευθείας στο πληρωτέο.
+      </div>
+
       <label>Λοιπές αποδοχές</label>
       <input type="number" id="extra" step="0.01" value="0">
 
@@ -99,6 +103,12 @@
     <section class="card">
       <div class="badge">Ανάλυση</div>
       <h2>Αποτελέσματα</h2>
+      <div class="legend">
+        <span><i class="income-dot"></i>Αποδοχές</span>
+        <span><i class="deduction-dot"></i>Κρατήσεις</span>
+        <span><i class="tax-dot"></i>Εφορία / Φόρος</span>
+        <span><i class="extra-dot"></i>Νύχτες - Πενθήμερα</span>
+      </div>
       <div id="results" class="empty">Πάτησε «Υπολογισμός» ή άλλαξε κάποια επιλογή.</div>
     </section>
   </div>
@@ -408,30 +418,30 @@ function calculate(){
   const newHireText = newHire ? ', Νέος διορισμός' : '';
 
   results.innerHTML = `
-    <div class="result-row"><span>Βαθμός / κλιμάκιο</span><strong>${row.grade} – Κλιμάκιο ${row.klimakio}</strong></div>
-    <div class="result-row"><span>Βασικός μισθός</span><strong>${euro(basic)}</strong></div>
-    <div class="result-row"><span>Επίδομα ιδιαιτέρων καθηκόντων</span><strong>${euro(specialDuty)}</strong></div>
-    <div class="result-row"><span>Οικογενειακή παροχή</span><strong>${euro(familyAllowance)}</strong></div>
-    <div class="result-row"><span>Σύνολο αποδοχών</span><strong>${euro(gross)}</strong></div>
+    <div class="result-row row-info"><span>Βαθμός / κλιμάκιο</span><strong>${row.grade} – Κλιμάκιο ${row.klimakio}</strong></div>
+    <div class="result-row row-income"><span>Βασικός μισθός</span><strong>${euro(basic)}</strong></div>
+    <div class="result-row row-income"><span>Επίδομα ιδιαιτέρων καθηκόντων</span><strong>${euro(specialDuty)}</strong></div>
+    <div class="result-row row-income"><span>Οικογενειακή παροχή</span><strong>${euro(familyAllowance)}</strong></div>
+    <div class="result-row row-income total-row"><span>Σύνολο αποδοχών</span><strong>${euro(gross)}</strong></div>
 
-    <div class="result-row"><span>ΤΠΔΥ 4%</span><span>${euro(tpdy)}</span></div>
-    <div class="result-row"><span>ΜΤΠΥ</span><span>${euro(mtpy)}</span></div>
-    <div class="result-row"><span>ΤΕΑΔΥ 3%</span><span>${euro(teady)}</span></div>
-    <div class="result-row"><span>Υγειονομική 2,05%</span><span>${euro(health)}</span></div>
-    <div class="result-row"><span>ΕΦΚΑ σύνταξη 6,67%</span><span>${euro(pension)}</span></div>
-    <div class="result-row"><span>Ανεργία 2%</span><span>${euro(unemployment)}</span></div>
-    <div class="result-row"><span>Εισφορά ΠΟΥΕΦ</span><span>${euro(pouef)}</span></div>
-    ${fiveYear ? `<div class="result-row"><span>Αναγνώριση 5ετίας</span><span>${euro(fiveYearDeduction)}</span></div>` : ''}
+    <div class="result-row row-deduction"><span>ΤΠΔΥ 4%</span><span>${euro(tpdy)}</span></div>
+    <div class="result-row row-deduction"><span>ΜΤΠΥ</span><span>${euro(mtpy)}</span></div>
+    <div class="result-row row-deduction"><span>ΤΕΑΔΥ 3%</span><span>${euro(teady)}</span></div>
+    <div class="result-row row-deduction"><span>Υγειονομική 2,05%</span><span>${euro(health)}</span></div>
+    <div class="result-row row-deduction"><span>ΕΦΚΑ σύνταξη 6,67%</span><span>${euro(pension)}</span></div>
+    <div class="result-row row-deduction"><span>Ανεργία 2%</span><span>${euro(unemployment)}</span></div>
+    <div class="result-row row-deduction"><span>Εισφορά ΠΟΥΕΦ</span><span>${euro(pouef)}</span></div>
+    ${fiveYear ? `<div class="result-row row-deduction"><span>Αναγνώριση 5ετίας</span><span>${euro(fiveYearDeduction)}</span></div>` : ''}
 
-    <div class="result-row"><span>Σύνολο κρατήσεων ασφάλισης</span><strong>${euro(insuranceTotal)}</strong></div>
-    <div class="result-row"><span>Φορολογητέο μετά τις κρατήσεις</span><strong>${euro(taxableMonthly)}</strong></div>
-    <div class="result-row"><span>Ετήσιο φορολογητέο (12 μισθοί)</span><span>${euro(annualTaxable)}</span></div>
-    <div class="result-row"><span>Ετήσιος φόρος πριν τη μείωση</span><span>${euro(annualTaxBeforeCredit)}</span></div>
-    <div class="result-row"><span>Μείωση φόρου άρθρου 16</span><span>- ${euro(taxCredit)}</span></div>
-    <div class="result-row"><span>Μηνιαίος φόρος</span><strong>${euro(monthlyTax)}</strong></div>
-    <div class="result-row"><span>Νύχτες</span><span>${euro(nightTotal)}</span></div>
-    <div class="result-row"><span>Πενθήμερα</span><span>${euro(fiveDayTotal)}</span></div>
-    <div class="result-row"><span>Σύνολο κρατήσεων + φόρου</span><strong>${euro(totalDeductions)}</strong></div>
+    <div class="result-row row-deduction total-row"><span>Σύνολο κρατήσεων ασφάλισης</span><strong>${euro(insuranceTotal)}</strong></div>
+    <div class="result-row row-taxable"><span>Φορολογητέο μετά τις κρατήσεις</span><strong>${euro(taxableMonthly)}</strong></div>
+    <div class="result-row row-tax"><span>Ετήσιο φορολογητέο (12 μισθοί)</span><span>${euro(annualTaxable)}</span></div>
+    <div class="result-row row-tax"><span>Ετήσιος φόρος πριν τη μείωση</span><span>${euro(annualTaxBeforeCredit)}</span></div>
+    <div class="result-row row-tax-credit"><span>Μείωση φόρου άρθρου 16</span><span>- ${euro(taxCredit)}</span></div>
+    <div class="result-row row-tax total-row"><span>Μηνιαίος φόρος</span><strong>${euro(monthlyTax)}</strong></div>
+    <div class="result-row row-extra"><span>Νύχτες (καθαρά)</span><span>${euro(nightTotal)}</span></div>
+    <div class="result-row row-extra"><span>Πενθήμερα (καθαρά)</span><span>${euro(fiveDayTotal)}</span></div>
+    <div class="result-row row-grand-deduction total-row"><span>Σύνολο κρατήσεων + φόρου</span><strong>${euro(totalDeductions)}</strong></div>
     <div class="result-row"><span class="net">Καθαρό πληρωτέο</span><span class="net">${euro(finalNet)}</span></div>
 
     <div class="small-note">
