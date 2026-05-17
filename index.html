@@ -1,175 +1,338 @@
-
 <!DOCTYPE html>
 <html lang="el">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Μισθολόγιο Εξωτερικής Φρουράς - Τελικό Φόρος</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Μισθολόγιο Εξωτερικής Φρουράς</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="wrap">
+  <header class="hero">
+    <h1>Μισθολόγιο Εξωτερικής Φρουράς</h1>
+    <p>Υπολογισμός αποδοχών, κρατήσεων και φόρου 2026</p>
+  </header>
 
-<header>
-<h1>Μισθολόγιο Εξωτερικής Φρουράς</h1>
-<p>Υπολογισμός μισθού & ετήσιου φόρου 2026</p>
-</header>
+  <div class="grid">
+    <section class="card">
+      <div class="badge">Στοιχεία</div>
+      <h2>Εργαζόμενος</h2>
 
-<nav class="tabs">
-<button class="tablinks" onclick="openTab(event,'Employee')">Στοιχεία Εργαζόμενου</button>
-<button class="tablinks" onclick="openTab(event,'Extras')">Επιδόματα / Νύχτες</button>
-<button class="tablinks" onclick="openTab(event,'Result')">Υπολογισμός</button>
-</nav>
+      <label>Ημερομηνία πρόσληψης</label>
+      <input type="date" id="hireDate" value="2000-07-20">
 
-<section id="Employee" class="tabcontent">
-<div class="control">
-<label>Ημερομηνία Πρόσληψης:</label>
-<input type="date" id="hireDate" value="2000-07-20">
-</div>
-<div class="control">
-<label>Έτη Υπηρεσίας:</label>
-<input type="number" id="yearsService" min="0" max="40" value="26">
-</div>
-<div class="control">
-<label>Βαθμός:</label>
-<select id="grade">
-<option value="Υπαρχιφύλακας Α">Υπαρχιφύλακας Α</option>
-<option value="Υπαρχιφύλακας Β">Υπαρχιφύλακας Β</option>
-</select>
-</div>
-<div class="control">
-<label>Ηλικία εργαζόμενου:</label>
-<select id="employeeAge">
-<option value="<25">Μέχρι 25</option>
-<option value="26-30">26-30</option>
-<option value=">30">31 και πάνω</option>
-</select>
-</div>
-<div class="control">
-<label>Οικογενειακή κατάσταση:</label>
-<select id="familyStatus">
-<option value="single">Άγαμος</option>
-<option value="married">Έγγαμος χωρίς παιδιά</option>
-<option value="marriedKids">Έγγαμος με παιδιά</option>
-</select>
-</div>
-<div class="control">
-<label>Αριθμός παιδιών:</label>
-<select id="numChildren">
-<option value="0">0</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6+</option>
-</select>
-</div>
-<div class="control">
-<label>Ασφαλισμένος πριν/μετά 1993:</label>
-<select id="insured">
-<option value="before1993">Παλαιός (πριν 1993)</option>
-<option value="after1993">Νέος (μετά 1993)</option>
-</select>
-</div>
-</section>
+      <div class="row2">
+        <div>
+          <label>Έτη υπηρεσίας</label>
+          <input type="number" id="yearsService" min="0" max="45" value="26">
+        </div>
+        <div>
+          <label>Ασφαλισμένος</label>
+          <select id="insured">
+            <option value="after1993" selected>Νέος / μετά το 1993</option>
+            <option value="before1993">Παλαιός / πριν το 1993</option>
+          </select>
+        </div>
+      </div>
 
-<section id="Extras" class="tabcontent">
-<div class="control">
-<label>Νύχτες:</label>
-<input type="number" id="nights" min="0" value="0">
-</div>
-<div class="control">
-<label>Πενθήμερα:</label>
-<input type="number" id="fiveDays" min="0" value="0">
-</div>
-<div class="control">
-<label>Αναγνώριση 5ετίας:</label>
-<select id="fiveYear">
-<option value="no">Όχι</option>
-<option value="yes">Ναι</option>
-</select>
-</div>
-</section>
+      <div class="row2">
+        <div>
+          <label>Οικογενειακή κατάσταση</label>
+          <select id="familyStatus">
+            <option value="single">Άγαμος</option>
+            <option value="married" selected>Έγγαμος</option>
+          </select>
+        </div>
+        <div>
+          <label>Παιδιά</label>
+          <select id="children">
+            <option value="0">0</option>
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6+</option>
+          </select>
+        </div>
+      </div>
 
-<section id="Result" class="tabcontent">
-<table id="salaryTable">
-<thead>
-<tr>
-<th>Κλιμάκιο</th><th>Βασικός Μισθός</th><th>Επίδομα</th><th>Οικογενειακή Παροχή</th>
-<th>Σύνολο Μηνιαίο</th><th>Κρατήσεις Μηνιαίες</th><th>Φόρος Ετήσιος</th><th>Φόρος Μηνιαίος</th>
-<th>Καθαρό Μηνιαίο</th><th>Νύχτες</th><th>Πενθήμερα</th><th>Τελικό Μηνιαίο</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</section>
+      <div class="row2">
+        <div>
+          <label>Ηλικία για φορολογία</label>
+          <select id="ageGroup">
+            <option value="u25">Μέχρι 25 ετών</option>
+            <option value="26_30">26 - 30 ετών</option>
+            <option value="31p" selected>31 και πάνω</option>
+          </select>
+        </div>
+        <div>
+          <label>Αναγνώριση 5ετίας</label>
+          <select id="fiveYear">
+            <option value="no" selected>Όχι</option>
+            <option value="yes">Ναι</option>
+          </select>
+        </div>
+      </div>
 
-<footer>
-<p>Μερκούριος Κερμανίδης – <a href="mailto:merkos1969@gmail.com">merkos1969@gmail.com</a></p>
-</footer>
+      <div class="section-title">Πρόσθετα</div>
+      <div class="row2">
+        <div>
+          <label>Νύχτες</label>
+          <input type="number" id="nights" min="0" value="0">
+        </div>
+        <div>
+          <label>Πενθήμερα</label>
+          <input type="number" id="fiveDays" min="0" value="0">
+        </div>
+      </div>
+
+      <label>Λοιπές αποδοχές</label>
+      <input type="number" id="extra" step="0.01" value="0">
+
+      <button onclick="calculate()">Υπολογισμός</button>
+      <p class="hint">Ο φόρος υπολογίζεται ετήσια πάνω στο φορολογητέο μετά τις κρατήσεις και ο μηνιαίος φόρος βγαίνει διά 12.</p>
+    </section>
+
+    <section class="card">
+      <div class="badge">Ανάλυση</div>
+      <h2>Αποτελέσματα</h2>
+      <div id="results" class="empty">Πάτησε «Υπολογισμός» ή άλλαξε κάποια επιλογή.</div>
+    </section>
+  </div>
+
+  <footer>
+    Μερκούριος Κερμανίδης – <a href="mailto:merkos1969@gmail.com">merkos1969@gmail.com</a>
+  </footer>
+</div>
 
 <script>
-function openTab(evt, tabName){
-  var i, tabcontent, tablinks;
-  tabcontent=document.getElementsByClassName("tabcontent");
-  for(i=0;i<tabcontent.length;i++){tabcontent[i].style.display="none";}
-  tablinks=document.getElementsByClassName("tablinks");
-  for(i=0;i<tablinks.length;i++){tablinks[i].className=tablinks[i].className.replace(" active","");}
-  document.getElementById(tabName).style.display="block";
-  evt.currentTarget.className+=" active";
-}
-document.addEventListener("DOMContentLoaded",()=>{document.getElementsByClassName("tablinks")[0].click(); calculate();});
+const salaryRows = [{"start":0,"end":3,"grade":"ΦΡΟΥΡΟΣ","klimakio":1,"category":"Άγαμος","basic":1162.0,"special":205.0,"familyAllowance":0.0,"total":1367.0},{"start":0,"end":3,"grade":"ΦΡΟΥΡΟΣ","klimakio":1,"category":"Έγγαμος χωρίς παιδιά","basic":1162.0,"special":275.0,"familyAllowance":0.0,"total":1437.0},{"start":0,"end":3,"grade":"ΦΡΟΥΡΟΣ","klimakio":1,"category":"1 παιδί","basic":1162.0,"special":335.0,"familyAllowance":70.0,"total":1567.0},{"start":0,"end":3,"grade":"ΦΡΟΥΡΟΣ","klimakio":1,"category":"2 παιδιά","basic":1162.0,"special":335.0,"familyAllowance":120.0,"total":1617.0},{"start":0,"end":3,"grade":"ΦΡΟΥΡΟΣ","klimakio":1,"category":"3 παιδιά","basic":1162.0,"special":335.0,"familyAllowance":170.0,"total":1667.0},{"start":0,"end":3,"grade":"ΦΡΟΥΡΟΣ","klimakio":1,"category":"4 παιδιά","basic":1162.0,"special":335.0,"familyAllowance":220.0,"total":1717.0},{"start":3,"end":5,"grade":"ΦΡΟΥΡΟΣ","klimakio":2,"category":"Άγαμος","basic":1223.0,"special":205.0,"familyAllowance":0.0,"total":1428.0},{"start":3,"end":5,"grade":"ΦΡΟΥΡΟΣ","klimakio":2,"category":"Έγγαμος χωρίς παιδιά","basic":1223.0,"special":275.0,"familyAllowance":0.0,"total":1498.0},{"start":3,"end":5,"grade":"ΦΡΟΥΡΟΣ","klimakio":2,"category":"1 παιδί","basic":1223.0,"special":335.0,"familyAllowance":70.0,"total":1628.0},{"start":3,"end":5,"grade":"ΦΡΟΥΡΟΣ","klimakio":2,"category":"2 παιδιά","basic":1223.0,"special":335.0,"familyAllowance":120.0,"total":1678.0},{"start":3,"end":5,"grade":"ΦΡΟΥΡΟΣ","klimakio":2,"category":"3 παιδιά","basic":1223.0,"special":335.0,"familyAllowance":170.0,"total":1728.0},{"start":3,"end":5,"grade":"ΦΡΟΥΡΟΣ","klimakio":2,"category":"4 παιδιά","basic":1223.0,"special":335.0,"familyAllowance":220.0,"total":1778.0},{"start":5,"end":7,"grade":"ΦΡΟΥΡΟΣ","klimakio":3,"category":"Άγαμος","basic":1259.0,"special":205.0,"familyAllowance":0.0,"total":1464.0},{"start":5,"end":7,"grade":"ΦΡΟΥΡΟΣ","klimakio":3,"category":"Έγγαμος χωρίς παιδιά","basic":1259.0,"special":275.0,"familyAllowance":0.0,"total":1534.0},{"start":5,"end":7,"grade":"ΦΡΟΥΡΟΣ","klimakio":3,"category":"1 παιδί","basic":1259.0,"special":335.0,"familyAllowance":70.0,"total":1664.0},{"start":5,"end":7,"grade":"ΦΡΟΥΡΟΣ","klimakio":3,"category":"2 παιδιά","basic":1259.0,"special":335.0,"familyAllowance":120.0,"total":1714.0},{"start":5,"end":7,"grade":"ΦΡΟΥΡΟΣ","klimakio":3,"category":"3 παιδιά","basic":1259.0,"special":335.0,"familyAllowance":170.0,"total":1764.0},{"start":5,"end":7,"grade":"ΦΡΟΥΡΟΣ","klimakio":3,"category":"4 παιδιά","basic":1259.0,"special":335.0,"familyAllowance":220.0,"total":1814.0},{"start":7,"end":9,"grade":"ΦΡΟΥΡΟΣ","klimakio":4,"category":"Άγαμος","basic":1296.0,"special":205.0,"familyAllowance":0.0,"total":1501.0},{"start":7,"end":9,"grade":"ΦΡΟΥΡΟΣ","klimakio":4,"category":"Έγγαμος χωρίς παιδιά","basic":1296.0,"special":275.0,"familyAllowance":0.0,"total":1571.0},{"start":7,"end":9,"grade":"ΦΡΟΥΡΟΣ","klimakio":4,"category":"1 παιδί","basic":1296.0,"special":335.0,"familyAllowance":70.0,"total":1701.0},{"start":7,"end":9,"grade":"ΦΡΟΥΡΟΣ","klimakio":4,"category":"2 παιδιά","basic":1296.0,"special":335.0,"familyAllowance":120.0,"total":1751.0},{"start":7,"end":9,"grade":"ΦΡΟΥΡΟΣ","klimakio":4,"category":"3 παιδιά","basic":1296.0,"special":335.0,"familyAllowance":170.0,"total":1801.0},{"start":7,"end":9,"grade":"ΦΡΟΥΡΟΣ","klimakio":4,"category":"4 παιδιά","basic":1296.0,"special":335.0,"familyAllowance":220.0,"total":1851.0},{"start":9,"end":10,"grade":"ΦΡΟΥΡΟΣ","klimakio":5,"category":"Άγαμος","basic":1333.0,"special":205.0,"familyAllowance":0.0,"total":1538.0},{"start":9,"end":10,"grade":"ΦΡΟΥΡΟΣ","klimakio":5,"category":"Έγγαμος χωρίς παιδιά","basic":1333.0,"special":275.0,"familyAllowance":0.0,"total":1608.0},{"start":9,"end":10,"grade":"ΦΡΟΥΡΟΣ","klimakio":5,"category":"1 παιδί","basic":1333.0,"special":335.0,"familyAllowance":70.0,"total":1738.0},{"start":9,"end":10,"grade":"ΦΡΟΥΡΟΣ","klimakio":5,"category":"2 παιδιά","basic":1333.0,"special":335.0,"familyAllowance":120.0,"total":1788.0},{"start":9,"end":10,"grade":"ΦΡΟΥΡΟΣ","klimakio":5,"category":"3 παιδιά","basic":1333.0,"special":335.0,"familyAllowance":170.0,"total":1838.0},{"start":9,"end":10,"grade":"ΦΡΟΥΡΟΣ","klimakio":5,"category":"4 παιδιά","basic":1333.0,"special":335.0,"familyAllowance":220.0,"total":1888.0},{"start":10,"end":11,"grade":"ΥΠΑΡΧ Β","klimakio":5,"category":"Άγαμος","basic":1366.0,"special":155.0,"familyAllowance":0.0,"total":1521.0},{"start":10,"end":11,"grade":"ΥΠΑΡΧ Β","klimakio":5,"category":"Έγγαμος χωρίς παιδιά","basic":1366.0,"special":225.0,"familyAllowance":0.0,"total":1591.0},{"start":10,"end":11,"grade":"ΥΠΑΡΧ Β","klimakio":5,"category":"1 παιδί","basic":1366.0,"special":285.0,"familyAllowance":70.0,"total":1721.0},{"start":10,"end":11,"grade":"ΥΠΑΡΧ Β","klimakio":5,"category":"2 παιδιά","basic":1366.0,"special":285.0,"familyAllowance":120.0,"total":1771.0},{"start":10,"end":11,"grade":"ΥΠΑΡΧ Β","klimakio":5,"category":"3 παιδιά","basic":1366.0,"special":285.0,"familyAllowance":170.0,"total":1821.0},{"start":10,"end":11,"grade":"ΥΠΑΡΧ Β","klimakio":5,"category":"4 παιδιά","basic":1366.0,"special":285.0,"familyAllowance":220.0,"total":1871.0},{"start":11,"end":13,"grade":"ΥΠΑΡΧ Β","klimakio":6,"category":"Άγαμος","basic":1412.0,"special":155.0,"familyAllowance":0.0,"total":1567.0},{"start":11,"end":13,"grade":"ΥΠΑΡΧ Β","klimakio":6,"category":"Έγγαμος χωρίς παιδιά","basic":1412.0,"special":225.0,"familyAllowance":0.0,"total":1637.0},{"start":11,"end":13,"grade":"ΥΠΑΡΧ Β","klimakio":6,"category":"1 παιδί","basic":1412.0,"special":285.0,"familyAllowance":70.0,"total":1767.0},{"start":11,"end":13,"grade":"ΥΠΑΡΧ Β","klimakio":6,"category":"2 παιδιά","basic":1412.0,"special":285.0,"familyAllowance":120.0,"total":1817.0},{"start":11,"end":13,"grade":"ΥΠΑΡΧ Β","klimakio":6,"category":"3 παιδιά","basic":1412.0,"special":285.0,"familyAllowance":170.0,"total":1867.0},{"start":11,"end":13,"grade":"ΥΠΑΡΧ Β","klimakio":6,"category":"4 παιδιά","basic":1412.0,"special":285.0,"familyAllowance":220.0,"total":1917.0},{"start":13,"end":15,"grade":"ΥΠΑΡΧ Β","klimakio":7,"category":"Άγαμος","basic":1461.0,"special":155.0,"familyAllowance":0.0,"total":1616.0},{"start":13,"end":15,"grade":"ΥΠΑΡΧ Β","klimakio":7,"category":"Έγγαμος χωρίς παιδιά","basic":1461.0,"special":225.0,"familyAllowance":0.0,"total":1686.0},{"start":13,"end":15,"grade":"ΥΠΑΡΧ Β","klimakio":7,"category":"1 παιδί","basic":1461.0,"special":285.0,"familyAllowance":70.0,"total":1816.0},{"start":13,"end":15,"grade":"ΥΠΑΡΧ Β","klimakio":7,"category":"2 παιδιά","basic":1461.0,"special":285.0,"familyAllowance":120.0,"total":1866.0},{"start":13,"end":15,"grade":"ΥΠΑΡΧ Β","klimakio":7,"category":"3 παιδιά","basic":1461.0,"special":285.0,"familyAllowance":170.0,"total":1916.0},{"start":13,"end":15,"grade":"ΥΠΑΡΧ Β","klimakio":7,"category":"4 παιδιά","basic":1461.0,"special":285.0,"familyAllowance":220.0,"total":1966.0},{"start":15,"end":17,"grade":"ΥΠΑΡΧ Β","klimakio":8,"category":"Άγαμος","basic":1532.0,"special":155.0,"familyAllowance":0.0,"total":1687.0},{"start":15,"end":17,"grade":"ΥΠΑΡΧ Β","klimakio":8,"category":"Έγγαμος χωρίς παιδιά","basic":1532.0,"special":225.0,"familyAllowance":0.0,"total":1757.0},{"start":15,"end":17,"grade":"ΥΠΑΡΧ Β","klimakio":8,"category":"1 παιδί","basic":1532.0,"special":285.0,"familyAllowance":70.0,"total":1887.0},{"start":15,"end":17,"grade":"ΥΠΑΡΧ Β","klimakio":8,"category":"2 παιδιά","basic":1532.0,"special":285.0,"familyAllowance":120.0,"total":1937.0},{"start":15,"end":17,"grade":"ΥΠΑΡΧ Β","klimakio":8,"category":"3 παιδιά","basic":1532.0,"special":285.0,"familyAllowance":170.0,"total":1987.0},{"start":15,"end":17,"grade":"ΥΠΑΡΧ Β","klimakio":8,"category":"4 παιδιά","basic":1532.0,"special":285.0,"familyAllowance":220.0,"total":2037.0},{"start":17,"end":19,"grade":"ΥΠΑΡΧ Β","klimakio":9,"category":"Άγαμος","basic":1607.0,"special":155.0,"familyAllowance":0.0,"total":1762.0},{"start":17,"end":19,"grade":"ΥΠΑΡΧ Β","klimakio":9,"category":"Έγγαμος χωρίς παιδιά","basic":1607.0,"special":225.0,"familyAllowance":0.0,"total":1832.0},{"start":17,"end":19,"grade":"ΥΠΑΡΧ Β","klimakio":9,"category":"1 παιδί","basic":1607.0,"special":285.0,"familyAllowance":70.0,"total":1962.0},{"start":17,"end":19,"grade":"ΥΠΑΡΧ Β","klimakio":9,"category":"2 παιδιά","basic":1607.0,"special":285.0,"familyAllowance":120.0,"total":2012.0},{"start":17,"end":19,"grade":"ΥΠΑΡΧ Β","klimakio":9,"category":"3 παιδιά","basic":1607.0,"special":285.0,"familyAllowance":170.0,"total":2062.0},{"start":17,"end":19,"grade":"ΥΠΑΡΧ Β","klimakio":9,"category":"4 παιδιά","basic":1607.0,"special":285.0,"familyAllowance":220.0,"total":2112.0},{"start":19,"end":20,"grade":"ΥΠΑΡΧ Β","klimakio":10,"category":"Άγαμος","basic":1688.0,"special":155.0,"familyAllowance":0.0,"total":1843.0},{"start":19,"end":20,"grade":"ΥΠΑΡΧ Β","klimakio":10,"category":"Έγγαμος χωρίς παιδιά","basic":1688.0,"special":225.0,"familyAllowance":0.0,"total":1913.0},{"start":19,"end":20,"grade":"ΥΠΑΡΧ Β","klimakio":10,"category":"1 παιδί","basic":1688.0,"special":285.0,"familyAllowance":70.0,"total":2043.0},{"start":19,"end":20,"grade":"ΥΠΑΡΧ Β","klimakio":10,"category":"2 παιδιά","basic":1688.0,"special":285.0,"familyAllowance":120.0,"total":2093.0},{"start":19,"end":20,"grade":"ΥΠΑΡΧ Β","klimakio":10,"category":"3 παιδιά","basic":1688.0,"special":285.0,"familyAllowance":170.0,"total":2143.0},{"start":19,"end":20,"grade":"ΥΠΑΡΧ Β","klimakio":10,"category":"4 παιδιά","basic":1688.0,"special":285.0,"familyAllowance":220.0,"total":2193.0},{"start":20,"end":21,"grade":"ΥΠΑΡΧ Α","klimakio":10,"category":"Άγαμος","basic":1704.0,"special":180.0,"familyAllowance":0.0,"total":1884.0},{"start":20,"end":21,"grade":"ΥΠΑΡΧ Α","klimakio":10,"category":"Έγγαμος χωρίς παιδιά","basic":1704.0,"special":250.0,"familyAllowance":0.0,"total":1954.0},{"start":20,"end":21,"grade":"ΥΠΑΡΧ Α","klimakio":10,"category":"1 παιδί","basic":1704.0,"special":310.0,"familyAllowance":70.0,"total":2084.0},{"start":20,"end":21,"grade":"ΥΠΑΡΧ Α","klimakio":10,"category":"2 παιδιά","basic":1704.0,"special":310.0,"familyAllowance":120.0,"total":2134.0},{"start":20,"end":21,"grade":"ΥΠΑΡΧ Α","klimakio":10,"category":"3 παιδιά","basic":1704.0,"special":310.0,"familyAllowance":170.0,"total":2184.0},{"start":20,"end":21,"grade":"ΥΠΑΡΧ Α","klimakio":10,"category":"4 παιδιά","basic":1704.0,"special":310.0,"familyAllowance":220.0,"total":2234.0},{"start":21,"end":23,"grade":"ΥΠΑΡΧ Α","klimakio":11,"category":"Άγαμος","basic":1762.0,"special":180.0,"familyAllowance":0.0,"total":1942.0},{"start":21,"end":23,"grade":"ΥΠΑΡΧ Α","klimakio":11,"category":"Έγγαμος χωρίς παιδιά","basic":1762.0,"special":250.0,"familyAllowance":0.0,"total":2012.0},{"start":21,"end":23,"grade":"ΥΠΑΡΧ Α","klimakio":11,"category":"1 παιδί","basic":1762.0,"special":310.0,"familyAllowance":70.0,"total":2142.0},{"start":21,"end":23,"grade":"ΥΠΑΡΧ Α","klimakio":11,"category":"2 παιδιά","basic":1762.0,"special":310.0,"familyAllowance":120.0,"total":2192.0},{"start":21,"end":23,"grade":"ΥΠΑΡΧ Α","klimakio":11,"category":"3 παιδιά","basic":1762.0,"special":310.0,"familyAllowance":170.0,"total":2242.0},{"start":21,"end":23,"grade":"ΥΠΑΡΧ Α","klimakio":11,"category":"4 παιδιά","basic":1762.0,"special":310.0,"familyAllowance":220.0,"total":2292.0},{"start":23,"end":25,"grade":"ΥΠΑΡΧ Α","klimakio":12,"category":"Άγαμος","basic":1823.0,"special":180.0,"familyAllowance":0.0,"total":2003.0},{"start":23,"end":25,"grade":"ΥΠΑΡΧ Α","klimakio":12,"category":"Έγγαμος χωρίς παιδιά","basic":1823.0,"special":250.0,"familyAllowance":0.0,"total":2073.0},{"start":23,"end":25,"grade":"ΥΠΑΡΧ Α","klimakio":12,"category":"1 παιδί","basic":1823.0,"special":310.0,"familyAllowance":70.0,"total":2203.0},{"start":23,"end":25,"grade":"ΥΠΑΡΧ Α","klimakio":12,"category":"2 παιδιά","basic":1823.0,"special":310.0,"familyAllowance":120.0,"total":2253.0},{"start":23,"end":25,"grade":"ΥΠΑΡΧ Α","klimakio":12,"category":"3 παιδιά","basic":1823.0,"special":310.0,"familyAllowance":170.0,"total":2303.0},{"start":23,"end":25,"grade":"ΥΠΑΡΧ Α","klimakio":12,"category":"4 παιδιά","basic":1823.0,"special":310.0,"familyAllowance":220.0,"total":2353.0},{"start":25,"end":27,"grade":"ΥΠΑΡΧ Α","klimakio":13,"category":"Άγαμος","basic":1885.0,"special":180.0,"familyAllowance":0.0,"total":2065.0},{"start":25,"end":27,"grade":"ΥΠΑΡΧ Α","klimakio":13,"category":"Έγγαμος χωρίς παιδιά","basic":1885.0,"special":250.0,"familyAllowance":0.0,"total":2135.0},{"start":25,"end":27,"grade":"ΥΠΑΡΧ Α","klimakio":13,"category":"1 παιδί","basic":1885.0,"special":310.0,"familyAllowance":70.0,"total":2265.0},{"start":25,"end":27,"grade":"ΥΠΑΡΧ Α","klimakio":13,"category":"2 παιδιά","basic":1885.0,"special":310.0,"familyAllowance":120.0,"total":2315.0},{"start":25,"end":27,"grade":"ΥΠΑΡΧ Α","klimakio":13,"category":"3 παιδιά","basic":1885.0,"special":310.0,"familyAllowance":170.0,"total":2365.0},{"start":25,"end":27,"grade":"ΥΠΑΡΧ Α","klimakio":13,"category":"4 παιδιά","basic":1885.0,"special":310.0,"familyAllowance":220.0,"total":2415.0},{"start":27,"end":28,"grade":"ΥΠΑΡΧ Α","klimakio":14,"category":"Άγαμος","basic":1949.0,"special":180.0,"familyAllowance":0.0,"total":2129.0},{"start":27,"end":28,"grade":"ΥΠΑΡΧ Α","klimakio":14,"category":"Έγγαμος χωρίς παιδιά","basic":1949.0,"special":250.0,"familyAllowance":0.0,"total":2199.0},{"start":27,"end":28,"grade":"ΥΠΑΡΧ Α","klimakio":14,"category":"1 παιδί","basic":1949.0,"special":310.0,"familyAllowance":70.0,"total":2329.0},{"start":27,"end":28,"grade":"ΥΠΑΡΧ Α","klimakio":14,"category":"2 παιδιά","basic":1949.0,"special":310.0,"familyAllowance":120.0,"total":2379.0},{"start":27,"end":28,"grade":"ΥΠΑΡΧ Α","klimakio":14,"category":"3 παιδιά","basic":1949.0,"special":310.0,"familyAllowance":170.0,"total":2429.0},{"start":27,"end":28,"grade":"ΥΠΑΡΧ Α","klimakio":14,"category":"4 παιδιά","basic":1949.0,"special":310.0,"familyAllowance":220.0,"total":2479.0},{"start":28,"end":29,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":14,"category":"Άγαμος","basic":2005.0,"special":190.0,"familyAllowance":0.0,"total":2195.0},{"start":28,"end":29,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":14,"category":"Έγγαμος χωρίς παιδιά","basic":2005.0,"special":260.0,"familyAllowance":0.0,"total":2265.0},{"start":28,"end":29,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":14,"category":"1 παιδί","basic":2005.0,"special":320.0,"familyAllowance":70.0,"total":2395.0},{"start":28,"end":29,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":14,"category":"2 παιδιά","basic":2005.0,"special":320.0,"familyAllowance":120.0,"total":2445.0},{"start":28,"end":29,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":14,"category":"3 παιδιά","basic":2005.0,"special":320.0,"familyAllowance":170.0,"total":2495.0},{"start":28,"end":29,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":14,"category":"4 παιδιά","basic":2005.0,"special":320.0,"familyAllowance":220.0,"total":2545.0},{"start":29,"end":31,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":15,"category":"Άγαμος","basic":2073.0,"special":190.0,"familyAllowance":0.0,"total":2263.0},{"start":29,"end":31,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":15,"category":"Έγγαμος χωρίς παιδιά","basic":2073.0,"special":260.0,"familyAllowance":0.0,"total":2333.0},{"start":29,"end":31,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":15,"category":"1 παιδί","basic":2073.0,"special":320.0,"familyAllowance":70.0,"total":2463.0},{"start":29,"end":31,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":15,"category":"2 παιδιά","basic":2073.0,"special":320.0,"familyAllowance":120.0,"total":2513.0},{"start":29,"end":31,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":15,"category":"3 παιδιά","basic":2073.0,"special":320.0,"familyAllowance":170.0,"total":2563.0},{"start":29,"end":31,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":15,"category":"4 παιδιά","basic":2073.0,"special":320.0,"familyAllowance":220.0,"total":2613.0},{"start":31,"end":33,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":16,"category":"Άγαμος","basic":2145.0,"special":190.0,"familyAllowance":0.0,"total":2335.0},{"start":31,"end":33,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":16,"category":"Έγγαμος χωρίς παιδιά","basic":2145.0,"special":260.0,"familyAllowance":0.0,"total":2405.0},{"start":31,"end":33,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":16,"category":"1 παιδί","basic":2145.0,"special":320.0,"familyAllowance":70.0,"total":2535.0},{"start":31,"end":33,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":16,"category":"2 παιδιά","basic":2145.0,"special":320.0,"familyAllowance":120.0,"total":2585.0},{"start":31,"end":33,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":16,"category":"3 παιδιά","basic":2145.0,"special":320.0,"familyAllowance":170.0,"total":2635.0},{"start":31,"end":33,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":16,"category":"4 παιδιά","basic":2145.0,"special":320.0,"familyAllowance":220.0,"total":2685.0},{"start":33,"end":35,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":17,"category":"Άγαμος","basic":2219.0,"special":190.0,"familyAllowance":0.0,"total":2409.0},{"start":33,"end":35,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":17,"category":"Έγγαμος χωρίς παιδιά","basic":2219.0,"special":260.0,"familyAllowance":0.0,"total":2479.0},{"start":33,"end":35,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":17,"category":"1 παιδί","basic":2219.0,"special":320.0,"familyAllowance":70.0,"total":2609.0},{"start":33,"end":35,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":17,"category":"2 παιδιά","basic":2219.0,"special":320.0,"familyAllowance":120.0,"total":2659.0},{"start":33,"end":35,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":17,"category":"3 παιδιά","basic":2219.0,"special":320.0,"familyAllowance":170.0,"total":2709.0},{"start":33,"end":35,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":17,"category":"4 παιδιά","basic":2219.0,"special":320.0,"familyAllowance":220.0,"total":2759.0},{"start":35,"end":37,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":18,"category":"Άγαμος","basic":2294.0,"special":190.0,"familyAllowance":0.0,"total":2484.0},{"start":35,"end":37,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":18,"category":"Έγγαμος χωρίς παιδιά","basic":2294.0,"special":260.0,"familyAllowance":0.0,"total":2554.0},{"start":35,"end":37,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":18,"category":"1 παιδί","basic":2294.0,"special":320.0,"familyAllowance":70.0,"total":2684.0},{"start":35,"end":37,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":18,"category":"2 παιδιά","basic":2294.0,"special":320.0,"familyAllowance":120.0,"total":2734.0},{"start":35,"end":37,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":18,"category":"3 παιδιά","basic":2294.0,"special":320.0,"familyAllowance":170.0,"total":2784.0},{"start":35,"end":37,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":18,"category":"4 παιδιά","basic":2294.0,"special":320.0,"familyAllowance":220.0,"total":2834.0},{"start":37,"end":39,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":19,"category":"Άγαμος","basic":2339.0,"special":190.0,"familyAllowance":0.0,"total":2529.0},{"start":37,"end":39,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":19,"category":"Έγγαμος χωρίς παιδιά","basic":2339.0,"special":260.0,"familyAllowance":0.0,"total":2599.0},{"start":37,"end":39,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":19,"category":"1 παιδί","basic":2339.0,"special":320.0,"familyAllowance":70.0,"total":2729.0},{"start":37,"end":39,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":19,"category":"2 παιδιά","basic":2339.0,"special":320.0,"familyAllowance":120.0,"total":2779.0},{"start":37,"end":39,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":19,"category":"3 παιδιά","basic":2339.0,"special":320.0,"familyAllowance":170.0,"total":2829.0},{"start":37,"end":39,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":19,"category":"4 παιδιά","basic":2339.0,"special":320.0,"familyAllowance":220.0,"total":2879.0},{"start":39,"end":40,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":20,"category":"Άγαμος","basic":2385.0,"special":190.0,"familyAllowance":0.0,"total":2575.0},{"start":39,"end":40,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":20,"category":"Έγγαμος χωρίς παιδιά","basic":2385.0,"special":260.0,"familyAllowance":0.0,"total":2645.0},{"start":39,"end":40,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":20,"category":"1 παιδί","basic":2385.0,"special":320.0,"familyAllowance":70.0,"total":2775.0},{"start":39,"end":40,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":20,"category":"2 παιδιά","basic":2385.0,"special":320.0,"familyAllowance":120.0,"total":2825.0},{"start":39,"end":40,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":20,"category":"3 παιδιά","basic":2385.0,"special":320.0,"familyAllowance":170.0,"total":2875.0},{"start":39,"end":40,"grade":"ΑΡΧΙΦΥΛΑΚΑΣ","klimakio":20,"category":"4 παιδιά","basic":2385.0,"special":320.0,"familyAllowance":220.0,"total":2925.0}];
 
-// Παράδειγμα δεδομένων, μπορεί να αντικατασταθεί με Excel
-const salaryData = [{years:26, grade:'Υπαρχιφύλακας Α', klimakio:13, basic:1885, special:310, familyBase:70}];
+function num(id){
+  return parseFloat(document.getElementById(id).value) || 0;
+}
+function euro(x){
+  return new Intl.NumberFormat('el-GR', { style:'currency', currency:'EUR' }).format(x);
+}
+function clampMin0(x){
+  return x < 0 ? 0 : x;
+}
+
+function childrenValue(){
+  const v = parseInt(document.getElementById('children').value, 10) || 0;
+  return v >= 6 ? 6 : v;
+}
+
+function categoryFor(familyStatus, children){
+  if(children > 0){
+    if(children === 1) return '1 παιδί';
+    if(children === 2) return '2 παιδιά';
+    if(children === 3) return '3 παιδιά';
+    return '4 παιδιά';
+  }
+  return familyStatus === 'married' ? 'Έγγαμος χωρίς παιδιά' : 'Άγαμος';
+}
+
+function familyAllowanceByChildren(children){
+  if(children <= 0) return 0;
+  if(children === 1) return 70;
+  if(children === 2) return 120;
+  if(children === 3) return 170;
+  if(children === 4) return 220;
+  if(children === 5) return 270;
+  return 320; // 6+
+}
+
+function findSalary(years, familyStatus, children){
+  const category = categoryFor(familyStatus, children);
+  let row = salaryRows.find(r => years >= r.start && years < r.end && r.category === category);
+  if(!row){
+    row = salaryRows.find(r => years >= r.start && years < r.end && r.category === '4 παιδιά');
+  }
+  if(!row) return null;
+
+  const adjusted = {...row};
+  if(children >= 5){
+    adjusted.familyAllowance = familyAllowanceByChildren(children);
+    adjusted.total = adjusted.basic + adjusted.special + adjusted.familyAllowance;
+  }
+  return adjusted;
+}
+
+// Φορολογικοί συντελεστές 2026 όπως στο αρχείο αναφοράς
+function getRates(children, ageGroup){
+  let r1 = 0.09;
+  let r2 = 0.20;
+  let r3 = 0.26;
+  let r4 = 0.34;
+  let r5 = 0.39;
+  let r6 = 0.44;
+
+  if(ageGroup === 'u25'){
+    r1 = 0.00;
+    r2 = 0.00;
+  } else if(ageGroup === '26_30'){
+    r1 = 0.09;
+    r2 = 0.09;
+    if(children >= 4){
+      r1 = 0.00;
+      r2 = 0.00;
+    }
+  } else {
+    if(children === 1) r2 = 0.18;
+    if(children === 2) r2 = 0.16;
+    if(children === 3) r2 = 0.09;
+    if(children >= 4){
+      r1 = 0.00;
+      r2 = 0.00;
+    }
+  }
+
+  if(children === 1) r3 = 0.24;
+  else if(children === 2) r3 = 0.22;
+  else if(children === 3) r3 = 0.20;
+  else if(children >= 4) r3 = Math.max(0, 0.18 - (children - 4) * 0.02);
+
+  return { r1, r2, r3, r4, r5, r6 };
+}
+
+function progressiveTax(annualIncome, rates){
+  let tax = 0;
+  let remaining = annualIncome;
+
+  const bands = [
+    { cap: 10000, rate: rates.r1 },
+    { cap: 10000, rate: rates.r2 },
+    { cap: 10000, rate: rates.r3 },
+    { cap: 10000, rate: rates.r4 },
+    { cap: 20000, rate: rates.r5 },
+    { cap: Infinity, rate: rates.r6 }
+  ];
+
+  for(const band of bands){
+    if(remaining <= 0) break;
+    const part = Math.min(remaining, band.cap);
+    tax += part * band.rate;
+    remaining -= part;
+  }
+
+  return tax;
+}
+
+function getTaxCredit(children, annualTaxable){
+  let credit = 777;
+  if(children === 1) credit = 900;
+  else if(children === 2) credit = 1120;
+  else if(children === 3) credit = 1340;
+  else if(children === 4) credit = 1580;
+  else if(children >= 5) credit = 1780 + (children - 5) * 220;
+
+  if(children < 5 && annualTaxable > 12000){
+    credit -= (annualTaxable - 12000) * 0.02;
+  }
+
+  return clampMin0(credit);
+}
 
 function calculate(){
-    const tbody=document.querySelector('#salaryTable tbody');
-    tbody.innerHTML='';
-    const years=parseInt(document.getElementById('yearsService').value)||0;
-    const grade=document.getElementById('grade').value;
-    const ageCat=document.getElementById('employeeAge').value;
-    const family=document.getElementById('familyStatus').value;
-    const nights=parseFloat(document.getElementById('nights').value)||0;
-    const fiveDays=parseFloat(document.getElementById('fiveDays').value)||0;
-    const fiveYear=document.getElementById('fiveYear').value==='yes';
-    const numChildren=document.getElementById('numChildren').value==='6+'?6:parseInt(document.getElementById('numChildren').value);
-    const insured=document.getElementById('insured').value;
+  const years = parseInt(document.getElementById('yearsService').value, 10) || 0;
+  const familyStatus = document.getElementById('familyStatus').value;
+  const children = childrenValue();
+  const ageGroup = document.getElementById('ageGroup').value;
+  const insured = document.getElementById('insured').value;
+  const fiveYear = document.getElementById('fiveYear').value === 'yes';
+  const nights = num('nights');
+  const fiveDays = num('fiveDays');
+  const extra = num('extra');
 
-    const row=salaryData.find(r=>r.years===years && r.grade===grade);
-    if(!row) return;
+  const row = findSalary(years, familyStatus, children);
+  const results = document.getElementById('results');
 
-    let familyAllowance = family==='marriedKids'?row.familyBase*numChildren:0;
-    let monthlyGross=row.basic+row.special+familyAllowance;
-    let mtpyBasic=row.basic*0.045;
-    let mtpyAllowance=(insured==='before1993'?0.015:0.045)*row.special;
-    let fiveYearDeduction=fiveYear?39.87:0;
-    let monthlyDeductions=monthlyGross*0.04+monthlyGross*0.03+monthlyGross*0.0205+monthlyGross*0.0667+monthlyGross*0.02+mtpyBasic+mtpyAllowance+fiveYearDeduction;
+  if(!row){
+    results.innerHTML = '<div class="empty">Δεν βρέθηκε κλιμάκιο για αυτά τα έτη υπηρεσίας.</div>';
+    return;
+  }
 
-    let annualGross=monthlyGross*12;
-    let annualDeductions=monthlyDeductions*12;
+  const basic = row.basic;
+  const specialDuty = row.special;
+  const familyAllowance = row.familyAllowance;
+  const gross = basic + specialDuty + familyAllowance + extra;
 
-    // Υπολογισμός ετήσιου φόρου σύμφωνα με παράδειγμα
-    let ageFactor=0.28;
-    if(ageCat=='<25') ageFactor=0.24;
-    else if(ageCat=='26-30') ageFactor=0.26;
+  const tpdy = gross * 0.04;
+  const mtpy = insured === 'before1993'
+    ? (basic * 0.045) + ((specialDuty + familyAllowance + extra) * 0.015)
+    : gross * 0.045;
+  const teady = gross * 0.03;
+  const health = gross * 0.0205;
+  const pension = gross * 0.0667;
+  const unemployment = gross * 0.02;
+  const fiveYearDeduction = fiveYear ? 39.87 : 0;
 
-    // Παράδειγμα: έκπτωση φόρου άρθρο 16 ανά παιδί
-    let childCredit=numChildren*717.19; // Προσαρμόζουμε όπως φαίνεται στις εικόνες σου
-    let annualTax=Math.max(0,(annualGross-annualDeductions)*ageFactor - childCredit);
-    let monthlyTax=annualTax/12;
+  const insuranceTotal = tpdy + mtpy + teady + health + pension + unemployment + fiveYearDeduction;
+  const taxableMonthly = clampMin0(gross - insuranceTotal);
+  const salaryPeriods = 12;
+  const annualTaxable = taxableMonthly * salaryPeriods;
 
-    let net=monthlyGross-monthlyDeductions-monthlyTax;
-    let nightTotal=nights*20.35;
-    let fiveDayTotal=fiveDays*36.06;
-    let finalNet=net+nightTotal+fiveDayTotal;
+  const rates = getRates(children, ageGroup);
+  const annualTaxBeforeCredit = progressiveTax(annualTaxable, rates);
+  const taxCredit = getTaxCredit(children, annualTaxable);
+  const annualTax = clampMin0(annualTaxBeforeCredit - taxCredit);
+  const monthlyTax = annualTax / salaryPeriods;
 
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${row.klimakio}</td><td>${row.basic}</td><td>${row.special}</td><td>${familyAllowance}</td><td>${monthlyGross.toFixed(2)}</td><td>${monthlyDeductions.toFixed(2)}</td><td>${annualTax.toFixed(2)}</td><td>${monthlyTax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
-    tbody.appendChild(tr);
+  const nightTotal = nights * 20.35;
+  const fiveDayTotal = fiveDays * 36.06;
+  const totalDeductions = insuranceTotal + monthlyTax;
+  const net = gross - totalDeductions;
+  const finalNet = net + nightTotal + fiveDayTotal;
+
+  const childrenText = document.getElementById('children').value === '6' ? '6+' : document.getElementById('children').value;
+  const statusText = familyStatus === 'married' ? 'Έγγαμος' : 'Άγαμος';
+  const ageText = document.getElementById('ageGroup').options[document.getElementById('ageGroup').selectedIndex].text;
+  const insuredText = insured === 'before1993' ? 'Παλαιός / πριν το 1993' : 'Νέος / μετά το 1993';
+
+  results.innerHTML = `
+    <div class="result-row"><span>Βαθμός / κλιμάκιο</span><strong>${row.grade} – Κλιμάκιο ${row.klimakio}</strong></div>
+    <div class="result-row"><span>Βασικός μισθός</span><strong>${euro(basic)}</strong></div>
+    <div class="result-row"><span>Επίδομα ιδιαιτέρων καθηκόντων</span><strong>${euro(specialDuty)}</strong></div>
+    <div class="result-row"><span>Οικογενειακή παροχή</span><strong>${euro(familyAllowance)}</strong></div>
+    <div class="result-row"><span>Σύνολο αποδοχών</span><strong>${euro(gross)}</strong></div>
+
+    <div class="result-row"><span>ΤΠΔΥ 4%</span><span>${euro(tpdy)}</span></div>
+    <div class="result-row"><span>ΜΤΠΥ</span><span>${euro(mtpy)}</span></div>
+    <div class="result-row"><span>ΤΕΑΔΥ 3%</span><span>${euro(teady)}</span></div>
+    <div class="result-row"><span>Υγειονομική 2,05%</span><span>${euro(health)}</span></div>
+    <div class="result-row"><span>ΕΦΚΑ σύνταξη 6,67%</span><span>${euro(pension)}</span></div>
+    <div class="result-row"><span>Ανεργία 2%</span><span>${euro(unemployment)}</span></div>
+    ${fiveYear ? `<div class="result-row"><span>Αναγνώριση 5ετίας</span><span>${euro(fiveYearDeduction)}</span></div>` : ''}
+
+    <div class="result-row"><span>Σύνολο κρατήσεων ασφάλισης</span><strong>${euro(insuranceTotal)}</strong></div>
+    <div class="result-row"><span>Φορολογητέο μετά τις κρατήσεις</span><strong>${euro(taxableMonthly)}</strong></div>
+    <div class="result-row"><span>Ετήσιο φορολογητέο (12 μισθοί)</span><span>${euro(annualTaxable)}</span></div>
+    <div class="result-row"><span>Ετήσιος φόρος πριν τη μείωση</span><span>${euro(annualTaxBeforeCredit)}</span></div>
+    <div class="result-row"><span>Μείωση φόρου άρθρου 16</span><span>- ${euro(taxCredit)}</span></div>
+    <div class="result-row"><span>Μηνιαίος φόρος</span><strong>${euro(monthlyTax)}</strong></div>
+    <div class="result-row"><span>Νύχτες</span><span>${euro(nightTotal)}</span></div>
+    <div class="result-row"><span>Πενθήμερα</span><span>${euro(fiveDayTotal)}</span></div>
+    <div class="result-row"><span>Σύνολο κρατήσεων + φόρου</span><strong>${euro(totalDeductions)}</strong></div>
+    <div class="result-row"><span class="net">Καθαρό πληρωτέο</span><span class="net">${euro(finalNet)}</span></div>
+
+    <div class="small-note">
+      <strong>Έλεγχος υπολογισμού:</strong><br>
+      1) Αποδοχές = ${euro(gross)}<br>
+      2) Μείον κρατήσεις ασφάλισης = ${euro(insuranceTotal)}<br>
+      3) Φορολογητέο = ${euro(taxableMonthly)}<br>
+      4) Πάνω σε αυτό υπολογίζεται ο ετήσιος φόρος και μετά ο μηνιαίος /12.<br><br>
+      <strong>Επιλογές:</strong> ${statusText}, παιδιά: ${childrenText}, ηλικία: ${ageText}, ${insuredText}.
+    </div>
+  `;
 }
-document.querySelectorAll('input, select').forEach(el=>el.addEventListener('input', calculate));
-</script>
 
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('input', calculate);
+  el.addEventListener('change', calculate);
+});
+document.addEventListener('DOMContentLoaded', calculate);
+</script>
 </body>
 </html>
