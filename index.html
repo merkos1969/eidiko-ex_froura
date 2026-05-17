@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Μισθολόγιο Εξωτερικής Φρουράς - Τελικό</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Μισθολόγιο Δυναμικό - Τελικό</h1>
+
+<label>Ημερομηνία Πρόσληψης:
+<input type="date" id="hireDate">
+</label>
+
+<label>Νεοδιορισμένος:
+<input type="checkbox" id="newHire">
+</label>
+
+<label>Οικογενειακή κατάσταση:
+<select id="familyStatus">
+<option value="single">Άγαμος</option>
+<option value="married">Έγγαμος χωρίς παιδιά</option>
+<option value="marriedKids">Έγγαμος με παιδιά</option>
+</select>
+</label>
+
+<label>Νύχτες:
+<input type="number" id="nights" min="0" value="0">
+</label>
+
+<label>Πενθήμερα:
+<input type="number" id="fiveDays" min="0" value="0">
+</label>
+
+<label>Αναγνώριση 5ετίας στις κρατήσεις:
+<select id="fiveYear">
+<option value="no">Όχι</option>
+<option value="yes">Ναι</option>
+</select>
+</label>
+
+<input type="file" id="csvFile" accept=".csv">
+
+<table id="salaryTable">
+<thead>
+<tr>
+<th>Κατηγορία</th>
+<th>Βασικός Μισθός</th>
+<th>Νυχτερινά</th>
+<th>Σύνολο</th>
+<th>Κρατήσεις</th>
+<th>Φόρος</th>
+<th>Καθαρό</th>
+<th>Νύχτες</th>
+<th>Πενθήμερα</th>
+<th>Τελικό Καθαρό</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<script>
+const rates = {TPDY:0.04, TEADY:0.03, Health:0.0205, EFKA:0.0667, Unemp:0.02};
+const nightRate = 20.35;
+const fiveDayRate = 36.06;
+const fiveYearAmount = 39.87;
+
+document.getElementById('csvFile').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e){
+        const text = e.target.result;
+        const rows = text.trim().split('\n');
+        const tbody = document.querySelector('#salaryTable tbody');
+        tbody.innerHTML = '';
+        const hireDate = new Date(document.getElementById('hireDate').value);
+        const hireYear = hireDate.getFullYear();
+        const isNew = document.getElementById('newHire').checked;
+        const family = document.getElementById('familyStatus').value;
+        const nights = parseFloat(document.getElementById('nights').value)||0;
+        const fiveDays = parseFloat(document.getElementById('fiveDays').value)||0;
+        const fiveYearSelected = document.getElementById('fiveYear').value==='yes';
+
+        for(let i=1;i<rows.length;i++){
+            const cols = rows[i].split(',');
+            const category = cols[0];
+            const basic = parseFloat(cols[1]);
+            const nightExtra = parseFloat(cols[2]);
+
+            // Ειδικά επιδόματα ανά οικογενειακή κατάσταση
+            let specialDuty = 0;
+            let childrenAllowance = 0;
+            if(family==='single'){specialDuty=300;}
+            else if(family==='married'){specialDuty=310;}
+            else if(family==='marriedKids'){specialDuty=310; childrenAllowance=70;}
+
+            const gross = basic + nightExtra + specialDuty + childrenAllowance;
+
+            // Υπολογισμός ΜΤΠΥ
+            let mtpyBasic = basic*0.045; // όλοι 4.5% βασικό
+            let mtpyAllowance = (hireYear<1993 ? 0.015 : 0.045)*(specialDuty+childrenAllowance); // επιδόματα
+
+            // Νεοδιορισμένος → 1/12 βασικού μόνο για 1 χρόνο
+            if(isNew){ mtpyBasic = basic/12; mtpyAllowance = 0; }
+
+            // Κρατήσεις + 5ετία
+            let fiveYearDeduction = fiveYearSelected?fiveYearAmount:0;
+            let deductions = gross*rates.TPDY + gross*rates.TEADY + gross*rates.Health + gross*rates.EFKA + gross*rates.Unemp + mtpyBasic + mtpyAllowance + fiveYearDeduction;
+
+            // Φόρος επί (gross – deductions)
+            const taxRate = 0.26; // παράδειγμα
+            const tax = (gross - deductions)*taxRate;
+
+            const net = gross - deductions - tax;
+            const nightTotal = nights*nightRate;
+            const fiveDayTotal = fiveDays*fiveDayRate;
+            const finalNet = net + nightTotal + fiveDayTotal;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${category}</td><td>${basic.toFixed(2)}</td><td>${nightExtra.toFixed(2)}</td><td>${gross.toFixed(2)}</td><td>${deductions.toFixed(2)}</td><td>${tax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
+            tbody.appendChild(tr);
+        }
+    }
+    reader.readAsText(file);
+});
+</script>
+
+</body>
+</html>
