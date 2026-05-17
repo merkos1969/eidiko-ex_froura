@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Μισθολόγιο Δυναμικό - Ετήσιος Φόρος</title>
+<title>Μισθολόγιο Εξωτερικής Φρουράς - Τελικό</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -12,7 +12,7 @@
 
 <header>
 <h1>Μισθολόγιο Εξωτερικής Φρουράς</h1>
-<p>Δυναμικός υπολογισμός μισθού και ετήσιου φόρου 2026</p>
+<p>Υπολογισμός μισθών & ετήσιου φόρου 2026</p>
 </header>
 
 <nav class="tabs">
@@ -32,7 +32,10 @@
 </div>
 <div class="control">
 <label>Βαθμός:</label>
-<input type="text" id="grade" value="Υπαρχιφύλακας Β">
+<select id="grade">
+<option value="Υπαρχιφύλακας Α">Υπαρχιφύλακας Α</option>
+<option value="Υπαρχιφύλακας Β">Υπαρχιφύλακας Β</option>
+</select>
 </div>
 <div class="control">
 <label>Ηλικία εργαζόμενου:</label>
@@ -52,7 +55,7 @@
 </div>
 <div class="control">
 <label>Αριθμός παιδιών:</label>
-<select id="numChildren" size="4">
+<select id="numChildren">
 <option value="0">0</option>
 <option value="1">1</option>
 <option value="2">2</option>
@@ -60,10 +63,13 @@
 <option value="4">4</option>
 <option value="5">5</option>
 <option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
+</select>
+</div>
+<div class="control">
+<label>Ασφαλισμένος πριν/μετά 1993:</label>
+<select id="insured">
+<option value="before1993">Παλαιός (πριν 1993)</option>
+<option value="after1993">Νέος (μετά 1993)</option>
 </select>
 </div>
 </section>
@@ -118,6 +124,10 @@ document.addEventListener("DOMContentLoaded",()=>{document.getElementsByClassNam
 const rates={TPDY:0.04,TEADY:0.03,Health:0.0205,EFKA:0.0667,Unemp:0.02};
 const nightRate=20.35; const fiveDayRate=36.06; const fiveYearAmount=39.87;
 
+const salaryData = [
+{years:26, grade:'Υπαρχιφύλακας Α', klimakio:13, basic:1885, special:310, familyBase:70}
+];
+
 function calculate(){
     const tbody=document.querySelector('#salaryTable tbody');
     tbody.innerHTML='';
@@ -129,24 +139,35 @@ function calculate(){
     const fiveDays=parseFloat(document.getElementById('fiveDays').value)||0;
     const fiveYear=document.getElementById('fiveYear').value==='yes';
     const numChildren=parseInt(document.getElementById('numChildren').value)||0;
+    const insured=document.getElementById('insured').value;
 
-    const data=[{grade:'Υπαρχιφύλακας Β', years:26, klimakio:13, basic:1885, special:310, familyAllowance:70}];
-    data.forEach(row=>{
-        let monthlyGross=row.basic+row.special+row.familyAllowance;
-        let mtpyBasic=row.basic*0.045; let mtpyAllowance=row.special*0.045;
-        let fiveYearDeduction=fiveYear?fiveYearAmount:0;
-        let monthlyDeductions=monthlyGross*rates.TPDY+monthlyGross*rates.TEADY+monthlyGross*rates.Health+monthlyGross*rates.EFKA+monthlyGross*rates.Unemp+mtpyBasic+mtpyAllowance+fiveYearDeduction;
-        // Ετήσιος φόρος
-        let annualGross=monthlyGross*12; let annualDeductions=monthlyDeductions*12;
-        let ageFactor=1; if(ageCat=='<25') ageFactor=0.24; else if(ageCat=='26-30') ageFactor=0.26; else ageFactor=0.28;
-        let annualTax=(annualGross-annualDeductions)*ageFactor; let monthlyTax=annualTax/12;
-        let net=monthlyGross-monthlyDeductions-monthlyTax;
-        let nightTotal=nights*nightRate; let fiveDayTotal=fiveDays*fiveDayRate;
-        let finalNet=net+nightTotal+fiveDayTotal;
-        const tr=document.createElement('tr');
-        tr.innerHTML=`<td>${row.klimakio}</td><td>${row.basic}</td><td>${row.special}</td><td>${row.familyAllowance}</td><td>${monthlyGross.toFixed(2)}</td><td>${monthlyDeductions.toFixed(2)}</td><td>${annualTax.toFixed(2)}</td><td>${monthlyTax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
-        tbody.appendChild(tr);
-    });
+    const row = salaryData.find(r=>r.years===years && r.grade===grade);
+    if(!row) return;
+
+    let familyAllowance = family==='marriedKids'?row.familyBase*numChildren:0;
+    let monthlyGross = row.basic + row.special + familyAllowance;
+    let mtpyBasic=row.basic*0.045;
+    let mtpyAllowance=(insured==='before1993'?0.015:0.045)*(row.special);
+    let fiveYearDeduction=fiveYear?fiveYearAmount:0;
+    let monthlyDeductions=monthlyGross*rates.TPDY+monthlyGross*rates.TEADY+monthlyGross*rates.Health+monthlyGross*rates.EFKA+monthlyGross*rates.Unemp+mtpyBasic+mtpyAllowance+fiveYearDeduction;
+    
+    let annualGross = monthlyGross*12;
+    let annualDeductions = monthlyDeductions*12;
+    let ageFactor = 0.28;
+    if(ageCat=='<25') ageFactor=0.24;
+    else if(ageCat=='26-30') ageFactor=0.26;
+    let childDiscount = numChildren*200;
+    let annualTax=Math.max(0,(annualGross-annualDeductions)*ageFactor - childDiscount);
+    let monthlyTax = annualTax/12;
+
+    let net = monthlyGross - monthlyDeductions - monthlyTax;
+    let nightTotal=nights*nightRate;
+    let fiveDayTotal=fiveDays*fiveDayRate;
+    let finalNet = net + nightTotal + fiveDayTotal;
+
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${row.klimakio}</td><td>${row.basic}</td><td>${row.special}</td><td>${familyAllowance}</td><td>${monthlyGross.toFixed(2)}</td><td>${monthlyDeductions.toFixed(2)}</td><td>${annualTax.toFixed(2)}</td><td>${monthlyTax.toFixed(2)}</td><td>${net.toFixed(2)}</td><td>${nightTotal.toFixed(2)}</td><td>${fiveDayTotal.toFixed(2)}</td><td>${finalNet.toFixed(2)}</td>`;
+    tbody.appendChild(tr);
 }
 document.querySelectorAll('input, select').forEach(el=>el.addEventListener('input', calculate));
 </script>
