@@ -70,8 +70,8 @@ button:hover{background:var(--primary-dark);}
   border-bottom:1px solid var(--line);
   font-size:16px;
 }
-.result-row strong{font-size:17px;}
-.net{font-size:24px;font-weight:700;color:var(--good);}
+.result-row strong{font-size:19px;font-weight:800;}
+.net{font-size:28px;font-weight:900;color:var(--good);}
 .badge{
   display:inline-block;
   font-size:12px;
@@ -206,4 +206,26 @@ input[readonly]{
   color:#4c1d95;
   font-size:14px;
   line-height:1.45;
+}
+
+/* Μεγαλύτερα έντονα γράμματα */
+.result-row strong{
+  font-size:19px;
+  font-weight:800;
+}
+.result-row span.net,
+.result-row .net{
+  font-size:28px;
+  font-weight:900;
+}
+.badge{
+  font-size:13px;
+  font-weight:800;
+}
+button{
+  font-weight:800;
+}
+label{
+  font-size:16px;
+  font-weight:800;
 }
